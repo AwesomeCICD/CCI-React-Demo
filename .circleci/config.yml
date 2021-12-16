@@ -12,9 +12,11 @@ workflows:
           version: 16.11.0
           requires:
             - build
+      - hold:
+          type: approval
+          requires:
+            - node/test
       - heroku/deploy-via-git:
-          hold:
-            type: approval
           requires:
             - node/test
       
