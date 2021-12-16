@@ -1,15 +1,48 @@
-# orbs:
-#   node: circleci/node@2.0.0
-# version: 2.1
-# workflows:
-#   matrix-tests:
-#     jobs:
-#       - node/test:
-#           version: 16.11.0
 version: 2.1
+
 orbs:
-  heroku: circleci/heroku@0.0.10
+  heroku: circleci/heroku@1.2.6
+  node: circleci/node@4.9.0
+
 workflows:
-  heroku_deploy:
+  build-test-and-approval-deploy:
     jobs:
-      - heroku/deploy-via-git
+      - build_test
+      - heroku/deploy-via-git:
+          requires:
+            - build
+      - hold:
+          type: approval
+
+jobs:
+  build_test:
+    docker: 
+      - image: cimg/node:17.1.0
+    resource_class: medium
+
+    environment:
+      TEST_RESULTS: /tmp/test_results
+
+    steps:
+      - checkout
+      - run: mkdir -p $TEST_RESULTS
+
+      - restore_cache:
+          keys:
+            - npm-deps-{{ checksum "package-lock.json" }}
+
+      - node/test:
+          version: 16.11.0
+
+      - save_cache:
+          paths:
+            - ~/usr/local/lib/node_modules
+          key: npm-deps-{{ checksum "package-lock.json" }}
+      
+      - store_artifacts: # test 
+          path: /tmp/test-results
+          destination: raw-test-output
+
+      - store_test_results: # test
+          path: /tmp/test-results
+  
