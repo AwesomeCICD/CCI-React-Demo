@@ -7,15 +7,18 @@ orbs:
 workflows:
   build-test-and-approval-deploy:
     jobs:
-      - build_test
+      - build
+      - node/test:
+          requires:
+            - build
       - heroku/deploy-via-git:
           requires:
-            - build_test
+            - node/test
       - hold:
           type: approval
 
 jobs:
-  build_test:
+  build:
     docker: 
       - image: cimg/node:17.1.0
     resource_class: medium
@@ -30,8 +33,6 @@ jobs:
       - restore_cache:
           keys:
             - npm-deps-{{ checksum "package-lock.json" }}
-
-      - run: node/test
 
       - save_cache:
           paths:
