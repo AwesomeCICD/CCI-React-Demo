@@ -9,7 +9,7 @@ workflows:
     jobs:
       - build
       - node/test:
-          version: 16.11.0
+          version: 17.2.0
           requires:
             - build
       - hold:
@@ -24,7 +24,7 @@ workflows:
 jobs:
   build:
     docker: 
-      - image: cimg/node:16.11.0
+      - image: cimg/node:17.2.0
     resource_class: medium
 
     environment:
