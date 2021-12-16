@@ -18,7 +18,7 @@ workflows:
             - node/test
       - heroku/deploy-via-git:
           requires:
-            - node/test
+            - hold
       
 
 jobs:
