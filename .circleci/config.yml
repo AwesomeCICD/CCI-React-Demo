@@ -31,8 +31,7 @@ jobs:
           keys:
             - npm-deps-{{ checksum "package-lock.json" }}
 
-      - node/test:
-          version: 16.11.0
+      - run: node/test
 
       - save_cache:
           paths:
