@@ -10,7 +10,7 @@ workflows:
       - build_test
       - heroku/deploy-via-git:
           requires:
-            - build
+            - build_test
       - hold:
           type: approval
 
