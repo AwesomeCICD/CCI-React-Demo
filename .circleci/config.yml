@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   heroku: circleci/heroku@1.2.6
-  node: circleci/node@4.9.0
+  node: circleci/node@2.0.0
 
 workflows:
   build-test-and-approval-deploy:
