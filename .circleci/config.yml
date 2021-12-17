@@ -12,7 +12,7 @@ workflows:
       - build:
           requires:
             - lint_and_prettify
-        SAST:
+      -  SAST:
           requires:
             - build
       - node/test:
