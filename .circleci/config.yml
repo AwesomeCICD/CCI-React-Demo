@@ -33,7 +33,7 @@ jobs:
     steps:
       - checkout
       - run: npm ci
-      - run: npm i -g eslint prettier
+      - run: sudo npm i -g eslint prettier --unsafe-perm=true --allow-root
       - run: eslint src/*.js && prettier --check "src/*.js"
 
 
