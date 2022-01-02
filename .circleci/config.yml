@@ -61,12 +61,8 @@ jobs:
       - image: cimg/node:17.2.0
     resource_class: medium
 
-    environment:
-      TEST_RESULTS: /tmp/test_results
-
     steps:
       - checkout
-      - run: mkdir -p $TEST_RESULTS
       - run: npm ci
       - restore_cache:
           keys:
@@ -75,9 +71,3 @@ jobs:
           paths:
             - ~/usr/local/lib/node_modules
           key: npm-deps-{{ checksum "package-lock.json" }}
-      # - store_artifacts: # test 
-      #     path: /tmp/test-results
-      #     destination: raw-test-output
-      # - store_test_results: # test
-      #     path: /tmp/test-results
-  
