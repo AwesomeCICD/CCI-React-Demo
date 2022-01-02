@@ -4,6 +4,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
   node: circleci/node@2.0.0
   shiftleft: shiftleft/shiftleft@1.0.6
+  aws-elastic-beanstalk: circleci/aws-elastic-beanstalk@2.0.1
 
 workflows:
   build-test-and-approval-deploy:
@@ -26,7 +27,13 @@ workflows:
       - heroku/deploy-via-git:
           requires:
             - hold
-      
+      - deploy:
+          requires:
+            - hold
+          filters:
+            branches:
+              only:
+                - main
 
 jobs:
   lint_and_prettify:
@@ -74,3 +81,21 @@ jobs:
           paths:
             - ~/usr/local/lib/node_modules
           key: npm-deps-{{ checksum "package-lock.json" }}
+
+  deploy:
+    working_directory: ~/src
+    docker:
+      - image: cimg/node:17.2.0
+    steps:
+      - checkout
+      - run:
+          name: Installing deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python3-pip python3-dev build-essential
+            sudo pip3 install awsebcli
+
+      - run:
+          name: Deploying
+          command: eb deploy Ccijsdemo-env
