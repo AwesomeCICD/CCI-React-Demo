@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import { Button, Typography } from "@material-ui/core";
 
 function hasClicked(x) {
   if (x === true) {
@@ -12,17 +15,21 @@ function App() {
   const [click, setClick] = useState(false);
   return (
     <div className="App">
-      <header className="App-header">
-        {click ? <p>Thanks for the opportunity!</p> : null}
-        <button
+      <Header/>
+      <body className="body">
+        {click ?  <Typography variant="h2" gutterBottom>Thanks for clicking</Typography> :  <Typography variant="h2" gutterBottom>What a cool demo</Typography>}
+        <Button
+          variant="outlined"
+          size="large"
           onClick={() => {
             let clickedStatus = hasClicked(click);
             setClick(clickedStatus);
           }}
         >
-          Click me to add or remove text
-        </button>
-      </header>
+          Click Me
+        </Button>
+      </body>
+      <Footer/>
     </div>
   );
 }
