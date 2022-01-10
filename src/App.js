@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <body className="body">
+      <div className="body">
         {click ? (
           <Typography variant="h2" gutterBottom>
             Thanks for clicking
@@ -36,7 +36,7 @@ function App() {
         >
           Click Me
         </Button>
-      </body>
+      </div>
       <Footer />
     </div>
   );
