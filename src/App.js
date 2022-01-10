@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './Header';
+import Footer from './Footer';
 import { Button, Typography } from '@material-ui/core';
 
 function hasClicked(x) {

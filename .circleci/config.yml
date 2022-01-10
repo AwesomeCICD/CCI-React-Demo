@@ -24,6 +24,7 @@ workflows:
           type: approval
           requires:
             - node/test
+            - SAST
       - heroku/deploy-via-git:
           requires:
             - hold
