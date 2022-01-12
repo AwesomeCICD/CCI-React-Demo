@@ -63,7 +63,7 @@ jobs:
     docker: 
       - image: cimg/node:17.2.0
     resource_class: medium
-    parallelism: 1
+    parallelism: 2
 
     steps:
       - checkout
@@ -71,19 +71,11 @@ jobs:
           keys:
             - npm-deps-{{ checksum "package-lock.json" }}
       - run: npm ci
-      - run: mkdir ~/junit
       - run:
           name: Test application
           command: |
-              TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
+              TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split)
               npm run test $TEST
-      - run:
-          command: cp junit.xml ~/junit/
-          when: always
-      - store_test_results:
-          path: ~/junit
-      - store_artifacts:
-          path: ~/junit
       - save_cache:
           paths:
             - ~/usr/local/lib/node_modules
