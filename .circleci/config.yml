@@ -71,11 +71,19 @@ jobs:
           keys:
             - npm-deps-{{ checksum "package-lock.json" }}
       - run: npm ci
+      - run: mkdir ~/junit
       - run:
           name: Test application
           command: |
-              TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split)
-              npm run test $TEST
+              TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
+              npm run test:ci $TEST
+      - run:
+          command: cp junit.xml ~/junit/
+          when: always
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit
       - save_cache:
           paths:
             - ~/usr/local/lib/node_modules
