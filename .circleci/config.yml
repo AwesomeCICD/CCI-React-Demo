@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   heroku: circleci/heroku@1.2.6
   node: circleci/node@2.0.0
-  shiftleft: shiftleft/shiftleft@1.0.6
+  snyk: snyk/snyk@1.1.2
   # aws-elastic-beanstalk: circleci/aws-elastic-beanstalk@2.0.1
 
 workflows:
@@ -62,10 +62,7 @@ jobs:
       - checkout
       - run: npm ci
       - run: npm run build
-      - shiftleft/analyze:
-          app: CCICHALLENGE
-          target: src
-          language: js
+      - snyk/scan
 
   build:
     docker: 
