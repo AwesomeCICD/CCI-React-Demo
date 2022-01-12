@@ -3,23 +3,19 @@ version: 2.1
 orbs:
   heroku: circleci/heroku@1.2.6
   node: circleci/node@2.0.0
-  snyk: snyk/snyk@1.1.2
+  # snyk: snyk/snyk@1.1.2
   # aws-elastic-beanstalk: circleci/aws-elastic-beanstalk@2.0.1
 
 workflows:
   build-test-and-approval-deploy:
     jobs:
       - lint_and_prettify
-      - build:
+      - build_and_test:
           requires:
             - lint_and_prettify
-      -  SAST:
-          requires:
-            - build
-      - node/test:
-          version: 17.2.0
-          requires:
-            - build
+      # -  SAST:
+      #     requires:
+      #       - build
       - hold:
           type: approval
           requires:
@@ -55,26 +51,40 @@ jobs:
             - ~/usr/local/lib/node_modules
           key: npm-deps-{{ checksum "package-lock.json" }}
 
-  SAST: 
-    docker:
-      - image: cimg/node:17.2.0
-    steps:
-      - checkout
-      - run: npm ci
-      - run: npm run build
-      - snyk/scan
+  # SAST: 
+  #   docker:
+  #     - image: cimg/node:17.2.0
+  #   steps:
+  #     - checkout
+  #     - run: npm ci
+  #     - run: npm run build
+  #     - snyk/scan
 
-  build:
+  build_and_test:
     docker: 
       - image: cimg/node:17.2.0
     resource_class: medium
+    parallelism: 4
 
     steps:
       - checkout
-      - run: npm ci
       - restore_cache:
           keys:
             - npm-deps-{{ checksum "package-lock.json" }}
+      - run: npm ci
+      - run: mkdir ~/junit
+      - run:
+          name: Test application
+          command: |
+              TEST=$(circleci tests glob **/__tests__/*.js | circleci tests split --split-by=timings)
+              yarn test $TEST
+      - run:
+          command: cp junit.xml ~/junit/
+          when: always
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit
       - save_cache:
           paths:
             - ~/usr/local/lib/node_modules
