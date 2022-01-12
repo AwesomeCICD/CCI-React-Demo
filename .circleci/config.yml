@@ -63,7 +63,7 @@ jobs:
     docker: 
       - image: cimg/node:17.2.0
     resource_class: medium
-    parallelism: 2
+    parallelism: 1
 
     steps:
       - checkout
