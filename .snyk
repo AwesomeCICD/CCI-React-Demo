@@ -1,0 +1,13 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.22.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-CSSWHAT-1298035:
+    - react-scripts > @svgr/webpack > @svgr/plugin-svgo > svgo > css-select > css-what:
+        reason: no remediation available
+        expires: '2022-02-11T16:17:30.104Z'
+  SNYK-JS-NTHCHECK-1586032:
+    - react-scripts > @svgr/webpack > @svgr/plugin-svgo > svgo > css-select > nth-check:
+        reason: no remediation available
+        expires: '2022-02-11T16:17:30.104Z'
+patch: {}
