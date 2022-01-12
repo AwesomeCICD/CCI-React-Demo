@@ -16,14 +16,13 @@ workflows:
       # -  SAST:
       #     requires:
       #       - build
-      - hold:
-          type: approval
-          requires:
-            - node/test
-            - SAST
-      - heroku/deploy-via-git:
-          requires:
-            - hold
+      # - hold:
+      #     type: approval
+      #     requires:
+      #       - SAST
+      # - heroku/deploy-via-git:
+      #     requires:
+      #       - hold
       # - deploy:
       #     requires:
       #       - hold
