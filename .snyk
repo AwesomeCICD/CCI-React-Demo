@@ -4,10 +4,10 @@ version: v1.22.1
 ignore:
   SNYK-JS-CSSWHAT-1298035:
     - react-scripts > @svgr/webpack > @svgr/plugin-svgo > svgo > css-select > css-what:
-        reason: no remediation available
-        expires: '2022-02-11T16:17:30.104Z'
+        reason: No remediation available
+        expires: '2022-04-02T14:14:46.799Z'
   SNYK-JS-NTHCHECK-1586032:
     - react-scripts > @svgr/webpack > @svgr/plugin-svgo > svgo > css-select > nth-check:
-        reason: no remediation available
-        expires: '2022-02-11T16:17:30.104Z'
+        reason: No remedation available
+        expires: '2022-04-02T14:14:46.799Z'
 patch: {}
