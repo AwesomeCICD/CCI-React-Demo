@@ -26,8 +26,8 @@ workflows:
       #       - node/test
       #       - SAST
       # - heroku/deploy-via-git:
-          requires:
-            - hold
+          # requires:
+          #   - hold
       # - deploy:
       #     requires:
       #       - hold
