@@ -26,7 +26,6 @@ workflows:
           tag: 'test'
           repo: DemoECRRepo
           requires:
-            - build
             - node/test
             - SAST
       # - hold:
