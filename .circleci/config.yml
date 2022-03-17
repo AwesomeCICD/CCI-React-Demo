@@ -28,7 +28,7 @@ workflows:
           path: /project
           region: '${AWS_DEFAULT_REGION}'
           registry-id: AWS_ECR_REGISTRY_ID
-          repo: DemoECRRepo
+          repo: demo_ecr_repo
           requires:
             - node/test
             - SAST
