@@ -27,6 +27,8 @@ workflows:
           repo: DemoECRRepo
           requires:
             - build
+            - node/test
+            - SAST
       # - hold:
       #     type: approval
       #     requires:
