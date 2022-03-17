@@ -25,7 +25,7 @@ workflows:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           create-repo: true
-          path: /project/Dockerfile
+          # path: project/Dockerfile
           region: '${AWS_DEFAULT_REGION}'
           registry-id: AWS_ECR_REGISTRY_ID
           repo: demo_ecr_repo
