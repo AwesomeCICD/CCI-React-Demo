@@ -24,6 +24,9 @@ workflows:
       - aws-ecr/build-and-push-image:
           create-repo: true
           tag: 'test'
+          repo: DemoECRRepo
+          requires:
+            - build
       # - hold:
       #     type: approval
       #     requires:
