@@ -26,7 +26,7 @@ workflows:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           create-repo: true
           path: /project
-          region: AWS_DEFAULT_REGION
+          region: '${AWS_DEFAULT_REGION}'
           registry-id: AWS_ECR_REGISTRY_ID
           repo: DemoECRRepo
           requires:
