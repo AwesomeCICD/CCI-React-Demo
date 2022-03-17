@@ -23,11 +23,13 @@ workflows:
             - build
       - aws-ecr/build-and-push-image:
           create-repo: true
-          tag: 'test'
+          path: /project
+          registry-id: AWS_ECR_REGISTRY_ID
           repo: DemoECRRepo
           requires:
             - node/test
             - SAST
+          tag: 'test'
       # - hold:
       #     type: approval
       #     requires:
@@ -79,10 +81,10 @@ jobs:
 
     steps:
       - checkout
-      - run: npm ci
       - restore_cache:
           keys:
             - npm-deps-{{ checksum "package-lock.json" }}
+      - run: npm ci
       - save_cache:
           paths:
             - ~/usr/local/lib/node_modules
