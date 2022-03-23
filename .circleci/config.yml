@@ -140,7 +140,7 @@ jobs:
       - run: 
           name: Update image & version in manifest
           command: |
-            envsubst < vamp/demo-deployment.yml > modified-deployment.yaml
+            envsubst < vamp/deployment.yml > modified-deployment.yaml
             cat modified-deployment.yaml
       - kubernetes/install-kubectl
       - run:
