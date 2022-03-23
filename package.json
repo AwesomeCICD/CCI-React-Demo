@@ -20,7 +20,7 @@
     "start": "node server/index.js",
     "start-client": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "snyk test && react-scripts test",
     "test:ci": "npm run test -- --testResultsProcessor=\"jest-junit\"",
     "eject": "react-scripts eject",
     "snyk-e": "snyk test"
@@ -53,6 +53,6 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^2.5.1",
-    "snyk": "^1.825.0"
+    "snyk": "^1.881.0"
   }
 }
