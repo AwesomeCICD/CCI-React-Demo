@@ -15,5 +15,9 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+# Build node app
+RUN npm run build
+
+# Expose the port on the container
 EXPOSE 3000
 CMD [ "node", "server/index.js" ]

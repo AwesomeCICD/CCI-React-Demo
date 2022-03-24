@@ -65,7 +65,7 @@ workflows:
                 - vamp
       - update-deployment:
           requires:
-            - hold
+            - build-and-push-image
           filters:
             branches:
               only: vamp
