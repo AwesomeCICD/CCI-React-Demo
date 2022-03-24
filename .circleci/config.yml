@@ -56,6 +56,8 @@ workflows:
                 - main
                 - vamp
       - build-and-push-image:
+          # requires:
+          #   - hold
           filters:
             branches:
               only:
@@ -63,7 +65,7 @@ workflows:
                 - vamp
       - update-deployment:
           requires:
-            - build-and-push-image
+            - hold
           filters:
             branches:
               only: vamp
@@ -124,7 +126,9 @@ jobs:
     steps:
       - checkout
       - set-build-env
-      - docker/check
+      - docker/check:
+          docker-username: DOCKERHUB_USERNAME
+          docker-password: DOCKERHUB_PASSWORD
       - docker/build:
           image: dvcastillo37/cci-react-demo
           tag: ${VERSION}
