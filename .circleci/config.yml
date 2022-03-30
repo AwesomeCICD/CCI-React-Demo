@@ -38,9 +38,9 @@ workflows:
 
 jobs:
   lint_and_prettify:
-    docker: 
-      - image: cimg/node:17.2.0
-    resource_class: medium
+    executor:
+      name: win/default
+      shell: bash.exe
 
     steps:
       - checkout
