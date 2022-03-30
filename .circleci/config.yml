@@ -4,6 +4,7 @@ orbs:
   heroku: circleci/heroku@1.2.6
   node: circleci/node@2.0.0
   snyk: snyk/snyk@1.1.2
+  win: circleci/windows@2.2.0
   # aws-elastic-beanstalk: circleci/aws-elastic-beanstalk@2.0.1
 
 workflows:
