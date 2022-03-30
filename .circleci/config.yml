@@ -49,6 +49,8 @@ jobs:
           keys:
             - npm-deps-{{ checksum "package-lock.json" }}
       - run: npm ci
+      - run: ls
+      - run: get-location
       - run: sudo npm i -g eslint prettier --unsafe-perm=true --allow-root
       - run: eslint src/*.js && prettier --check "src/*.js"
       - save_cache:
