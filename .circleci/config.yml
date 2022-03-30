@@ -41,7 +41,7 @@ jobs:
   lint_and_prettify:
     executor:
       name: win/default
-      shell: bash.exe
+      shell: powershell.exe
 
     steps:
       - checkout
