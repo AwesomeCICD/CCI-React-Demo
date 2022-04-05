@@ -10,4 +10,8 @@ ignore:
     - react-scripts > @svgr/webpack > @svgr/plugin-svgo > svgo > css-select > nth-check:
         reason: No remedation available
         expires: '2022-04-02T14:14:46.799Z'
+  SNYK-JS-MINIMIST-2429795:
+    - react-scripts > tailwindcss > detective > minimist:
+        reason: no patch available
+        expires: '2022-05-05T14:48:28.850Z'
 patch: {}
