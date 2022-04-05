@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   node: circleci/node@2.0.0
   snyk: snyk/snyk@1.1.2
-  aws-ecr: circleci/aws-ecr@8.0.0
+  azure-acr: circleci/azure-acr@0.2.0
 
 workflows:
   build-test-and-approval-deploy:
@@ -24,13 +24,10 @@ workflows:
           requires:
             - node/test
             - SAST
-      - aws-ecr/build-and-push-image:
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: true
-          region: '${AWS_DEFAULT_REGION}'
-          registry-id: AWS_ECR_REGISTRY_ID
-          repo: demo_ecr_repo
+      - azure-acr/build-and-push-image:
+          login-server-name: AZURE_ACR_SERVER
+          registry-name: AZURE_USERNAME
+          repo: demo_acr_repo
           requires:
             - hold
           tag: 'test'
