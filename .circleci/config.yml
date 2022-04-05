@@ -25,8 +25,9 @@ workflows:
             - node/test
             - SAST
       - azure-acr/build-and-push-image:
-          login-server-name: AZURE_ACR_SERVER
-          registry-name: AZURE_USERNAME
+          context: work_az
+          login-server-name: $AZURE_ACR_SERVER
+          registry-name: $AZURE_USERNAME
           repo: demo_acr_repo
           requires:
             - hold
