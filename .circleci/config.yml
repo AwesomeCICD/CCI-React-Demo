@@ -101,7 +101,7 @@ jobs:
           tag: acr-demo
 
   deploy_image_to_acr:
-    executor: azure-cli/azure-docker
+    executor: docker/machine
     steps: 
       - docker/pull:
           images: "dvcastillo37/cci-react-demo:acr-demo"
