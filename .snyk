@@ -14,13 +14,20 @@ ignore:
     - react-scripts > tailwindcss > detective > minimist:
         reason: no patch available
         expires: '2022-05-05T14:48:28.850Z'
-      react-scripts > eslint-config-react-app > eslint-plugin-import > tsconfig-paths > minimist:
-        reason: reinstalled and still did not fix issue
-        expires: '2022-05-05T15:13:53.416Z'
     - react-scripts > @svgr/webpack > @svgr/plugin-svgo > svgo > mkdirp > minimist:
         reason: reinstalled and still did not fix issue
         expires: '2022-05-05T15:13:53.416Z'
     - react-scripts > eslint-config-react-app > eslint-plugin-import > tsconfig-paths > json5 > minimist:
         reason: reinstalled and still did not fix issue
         expires: '2022-05-05T15:13:53.416Z'
+    - react-scripts > eslint-config-react-app > eslint-plugin-import > tsconfig-paths > minimist:
+        reason: reinstalled and still did not fix issue
+        expires: '2022-05-05T15:13:53.416Z'
+  SNYK-JS-ASYNC-2441827:
+    - react-scripts > webpack-dev-server > portfinder > async:
+        reason: no direct patch available
+        expires: '2022-05-11T18:40:46.414Z'
+    - react-scripts > workbox-webpack-plugin > workbox-build > @surma/rollup-plugin-off-main-thread > ejs > jake > async:
+        reason: no direct patch available
+        expires: '2022-05-11T18:40:46.415Z'
 patch: {}
