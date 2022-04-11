@@ -114,7 +114,7 @@ jobs:
           command: az acr login --name $AZURE_ACR_SERVER
           name: "login to ACR registry"
       - run:
-          command: docker tag dvcastillo37/cci-react-demo $AZURE_ACR_SERVER/cci-react-demo:acr-demo
+          command: docker tag dvcastillo37/cci-react-demo:acr-demo $AZURE_ACR_SERVER/cci-react-demo:acr-demo
           name: "Tag the recently pulled image to ACR server"
       - run:
           command: docker push $AZURE_ACR_SERVER/cci-react-demo:acr-demo
