@@ -111,7 +111,7 @@ jobs:
           name: Verify GCP CLI was installed
       - gcp-cli/initialize
       - run: 
-          command: gcloud auth configure-docker $GOOGLE_COMPUTE_REGION-docker.pkg.dev; \ y
+          command: gcloud auth configure-docker $GOOGLE_COMPUTE_REGION-docker.pkg.dev
           name: "Authenticate into GCP registry"
       - run:
           command: docker tag dvcastillo37/cci-react-demo:gcp-demo $GOOGLE_COMPUTE_REGION-docker.pkg.dev/$GOOGLE_PROJECT_ID/cci-react-demo/cci-react-demo:gcp-demo
