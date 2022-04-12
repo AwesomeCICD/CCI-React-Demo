@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  azure-cli: circleci/azure-cli@1.2.2
   docker: circleci/docker@2.0.3
+  gcp-cli: circleci/gcp-cli@2.4.0
   node: circleci/node@2.0.0
   snyk: snyk/snyk@1.1.2
 
@@ -13,7 +13,7 @@ workflows:
       - build:
           requires:
             - lint_and_prettify
-      -  SAST:
+      -  Snyk_E:
           requires:
             - build
       - node/test:
@@ -24,23 +24,23 @@ workflows:
           type: approval
           requires:
             - node/test
-            - SAST
+            - Snyk_E
       - build-and-push-image:
           requires:
             - hold
           filters:
             branches:
               only:
-                - docker_az
-      - deploy_image_to_acr:
+                - docker_gcp
+      - deploy_image_to_gcp:
           context: 
-            - work_az
+            - work_gcp
           requires:
             - build-and-push-image
           filters:
             branches:
               only:
-                - docker_az
+                - docker_gcp
 
 jobs:
   lint_and_prettify:
@@ -61,7 +61,7 @@ jobs:
             - ~/usr/local/lib/node_modules
           key: npm-deps-{{ checksum "package-lock.json" }}
 
-  SAST: 
+  Snyk_E: 
     docker:
       - image: cimg/node:17.2.0
     steps:
@@ -95,27 +95,27 @@ jobs:
           docker-password: DOCKERHUB_PASSWORD
       - docker/build:
           image: dvcastillo37/cci-react-demo
-          tag: acr-demo
+          tag: gcp-demo
       - docker/push:
           image: dvcastillo37/cci-react-demo
-          tag: acr-demo
+          tag: gcp-demo
 
-  deploy_image_to_acr:
+  deploy_image_to_gcp:
     executor: docker/machine
     steps: 
       - docker/pull:
-          images: "dvcastillo37/cci-react-demo:acr-demo"
-      - azure-cli/install
+          images: "dvcastillo37/cci-react-demo:gcp-demo"
+      - gcp-cli/install
       - run:
-          command: az -v
-          name: Verify Azure CLI was installed
-      - azure-cli/login-with-user
+          command: gcloud version
+          name: Verify GCP CLI was installed
+      - gcp-cli/initialize
       - run: 
-          command: az acr login --name $AZURE_ACR_SERVER
-          name: "login to ACR registry"
+          command: gcloud auth configure-docker $GOOGLE_COMPUTE_REGION-docker.pkg.dev
+          name: "Authenticate into GCP registry"
       - run:
-          command: docker tag dvcastillo37/cci-react-demo:acr-demo $AZURE_ACR_SERVER/cci-react-demo:acr-demo
-          name: "Tag the recently pulled image to ACR server"
+          command: docker tag dvcastillo37/cci-react-demo:gcp-demo $GOOGLE_COMPUTE_REGION-docker.pkg.dev/$GOOGLE_PROJECT_ID/cci-react-demo:gcp-demo
+          name: "Tag the recently pulled image to GCP Registry"
       - run:
-          command: docker push $AZURE_ACR_SERVER/cci-react-demo:acr-demo
-          name: "Push image to ACR registry"
+          command: docker push $GOOGLE_COMPUTE_REGION-docker.pkg.dev/$GOOGLE_PROJECT_ID/cci-react-demo:gcp-demo
+          name: "Push image to GCP registry"
