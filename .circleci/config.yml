@@ -82,6 +82,7 @@ jobs:
             - npm-deps-{{ checksum "package-lock.json" }}
       - run: npm ci
       - run:
+          shell: /bin/sh
           command: |
             set +e
             npm run test 
