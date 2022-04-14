@@ -9,7 +9,7 @@ orbs:
 workflows:
   build-test-and-approval-deploy:
     jobs:
-      # - lint_and_prettify
+      - lint_and_prettify
       - build:
           requires:
             - lint_and_prettify
