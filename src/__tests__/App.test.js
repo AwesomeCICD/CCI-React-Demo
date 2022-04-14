@@ -5,7 +5,7 @@ test('calculates 1 + 1', () => {
 
 test('calculates 1 - 1', () => {
   let math = 1 - 1;
-  expect(math).toEqual(0);
+  expect(math).toEqual(1);
 });
 
 test('calculates 1 + 2', () => {

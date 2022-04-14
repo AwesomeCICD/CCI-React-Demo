@@ -9,7 +9,7 @@ orbs:
 workflows:
   build-test-and-approval-deploy:
     jobs:
-      - lint_and_prettify
+      # - lint_and_prettify
       - build:
           requires:
             - lint_and_prettify
@@ -71,8 +71,8 @@ jobs:
       - snyk/scan
 
   build:
-    docker: 
-      - image: cimg/node:17.2.0
+    machine: 
+      image: ubuntu-2004:202111-02
     resource_class: medium
 
     steps:
@@ -81,6 +81,10 @@ jobs:
           keys:
             - npm-deps-{{ checksum "package-lock.json" }}
       - run: npm ci
+      - run:
+          command: |
+            set +e
+            npm run test 
       - save_cache:
           paths:
             - ~/usr/local/lib/node_modules
