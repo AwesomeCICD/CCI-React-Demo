@@ -19,7 +19,7 @@ function App() {
       <div className="body">
         {click ? (
           <Typography variant="h2" gutterBottom>
-            Thanks for clicking
+            Thanks for stopping by
           </Typography>
         ) : (
           <Typography variant="h2" gutterBottom>
