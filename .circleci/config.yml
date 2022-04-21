@@ -6,42 +6,6 @@ orbs:
   node: circleci/node@2.0.0
   snyk: snyk/snyk@1.1.2
 
-workflows:
-  build-test-and-approval-deploy:
-    jobs:
-      - lint_and_prettify
-      - build:
-          requires:
-            - lint_and_prettify
-      -  Snyk_E:
-          requires:
-            - build
-      - node/test:
-          version: 17.2.0
-          requires:
-            - build
-      - hold:
-          type: approval
-          requires:
-            - node/test
-            - Snyk_E
-      - build-and-push-image:
-          requires:
-            - hold
-          filters:
-            branches:
-              only:
-                - docker_gcp
-      - deploy_image_to_gcp:
-          context: 
-            - work_gcp
-          requires:
-            - build-and-push-image
-          filters:
-            branches:
-              only:
-                - docker_gcp
-
 jobs:
   lint_and_prettify:
     docker: 
@@ -124,3 +88,40 @@ jobs:
       - run:
           command: docker push $GOOGLE_COMPUTE_REGION-docker.pkg.dev/$GOOGLE_PROJECT_ID/cci-react-demo/cci-react-demo:gcp-demo
           name: "Push image to GCP registry"
+
+workflows:
+  build-test-and-approval-deploy:
+    jobs:
+      - lint_and_prettify
+      - build:
+          requires:
+            - lint_and_prettify
+      -  Snyk_E:
+          requires:
+            - build
+      - node/test:
+          version: 17.2.0
+          requires:
+            - build
+      - hold:
+          type: approval
+          requires:
+            - node/test
+            - Snyk_E
+      - build-and-push-image:
+          requires:
+            - hold
+          filters:
+            branches:
+              only:
+                - docker_gcp
+      - deploy_image_to_gcp:
+          context: 
+            - work_gcp
+          requires:
+            - build-and-push-image
+          filters:
+            branches:
+              only:
+                - docker_gcp
+
