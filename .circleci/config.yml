@@ -4,6 +4,7 @@ orbs:
   docker: circleci/docker@2.0.3
   gcp-cli: circleci/gcp-cli@2.4.0
   node: circleci/node@2.0.0
+  slack: circleci/slack@4.9.3
   snyk: snyk/snyk@1.1.2
 
 jobs:
@@ -103,11 +104,17 @@ workflows:
           version: 17.2.0
           requires:
             - build
-      - hold:
-          type: approval
+      - slack/on-hold:
+          context: slack
           requires:
             - node/test
             - Snyk_E
+      - hold:
+          requires:
+            - node/test
+            - Snyk_E
+            - slack/on-hold
+          type: approval
       - build-and-push-image:
           requires:
             - hold
