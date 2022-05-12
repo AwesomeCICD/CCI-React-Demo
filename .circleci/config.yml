@@ -5,36 +5,6 @@ orbs:
   snyk: snyk/snyk@1.1.2
   aws-ecr: circleci/aws-ecr@8.0.0
 
-workflows:
-  build-test-and-approval-deploy:
-    jobs:
-      - lint_and_prettify
-      - build:
-          requires:
-            - lint_and_prettify
-      -  SAST:
-          requires:
-            - build
-      - node/test:
-          version: 17.2.0
-          requires:
-            - build
-      - hold:
-          type: approval
-          requires:
-            - node/test
-            - SAST
-      - aws-ecr/build-and-push-image:
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: true
-          region: '${AWS_DEFAULT_REGION}'
-          registry-id: AWS_ECR_REGISTRY_ID
-          repo: demo_ecr_repo
-          requires:
-            - hold
-          tag: 'test'
-
 jobs:
   lint_and_prettify:
     docker: 
@@ -78,3 +48,33 @@ jobs:
           paths:
             - ~/usr/local/lib/node_modules
           key: npm-deps-{{ checksum "package-lock.json" }}
+
+workflows:
+  build-test-and-approval-deploy:
+    jobs:
+      - lint_and_prettify
+      - build:
+          requires:
+            - lint_and_prettify
+      -  SAST:
+          requires:
+            - build
+      - node/test:
+          version: 17.2.0
+          requires:
+            - build
+      - hold:
+          type: approval
+          requires:
+            - node/test
+            - SAST
+      - aws-ecr/build-and-push-image:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          create-repo: true
+          region: '${AWS_DEFAULT_REGION}'
+          registry-id: AWS_ECR_REGISTRY_ID
+          repo: demo_ecr_repo
+          requires:
+            - hold
+          tag: 'test'
