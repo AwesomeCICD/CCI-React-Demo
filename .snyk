@@ -10,4 +10,25 @@ ignore:
     - react-scripts > @svgr/webpack > @svgr/plugin-svgo > svgo > css-select > nth-check:
         reason: No remediation available
         expires: '2022-06-12T14:54:59.256Z'
+  SNYK-JS-MINIMIST-2429795:
+    - react-scripts > tailwindcss > detective > minimist:
+        reason: >-
+          reinstalling react-scripts@5.0.0 does not solve this issue, waiting
+          for different patch
+        expires: '2022-06-12T15:01:20.094Z'
+    - react-scripts > eslint-config-react-app > eslint-plugin-import > tsconfig-paths > minimist:
+        reason: >-
+          reinstalling react-scripts@5.0.0 does not solve this issue, waiting
+          for different patch
+        expires: '2022-06-12T15:01:20.094Z'
+    - react-scripts > @svgr/webpack > @svgr/plugin-svgo > svgo > mkdirp > minimist:
+        reason: >-
+          reinstalling react-scripts@5.0.0 does not solve this issue, waiting
+          for different patch
+        expires: '2022-06-12T15:01:20.094Z'
+    - react-scripts > eslint-config-react-app > eslint-plugin-import > tsconfig-paths > json5 > minimist:
+        reason: >-
+          reinstalling react-scripts@5.0.0 does not solve this issue, waiting
+          for different patch
+        expires: '2022-06-12T15:01:20.094Z'
 patch: {}
