@@ -23,7 +23,7 @@ function App() {
           </Typography>
         ) : (
           <Typography variant="h2" gutterBottom>
-            What a cool demo
+            What a cool app
           </Typography>
         )}
         <Button
