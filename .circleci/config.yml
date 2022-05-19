@@ -3,7 +3,6 @@ version: 2.1
 orbs:
   node: circleci/node@2.0.0
   snyk: snyk/snyk@1.1.2
-  aws-ecr: circleci/aws-ecr@8.0.0
 
 jobs:
   lint_and_prettify:
@@ -49,6 +48,29 @@ jobs:
             - ~/usr/local/lib/node_modules
           key: npm-deps-{{ checksum "package-lock.json" }}
 
+  deploy:
+    docker:
+      - image: amazon/aws-cli
+    environment:
+      AWS_DEFAULT_REGION: AWS_DEFAULT_REGION
+      AWS_ROLE_ARN: AWS_ROLE_ARN
+    steps:
+      - run:
+          name: authenticate-and-interact
+          command: |
+            # use the OpenID Connect token to obtain AWS credentials
+            read -r AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN \<<< \
+              $(aws sts assume-role-with-web-identity \
+              --role-arn ${AWS_ROLE_ARN} \
+              --role-session-name "CircleCI-${CIRCLE_WORKFLOW_ID}-${CIRCLE_JOB}" \
+              --web-identity-token $CIRCLE_OIDC_TOKEN \
+              --duration-seconds 3600 \
+              --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
+              --output text)
+            export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+            # interact with AWS
+            aws sts get-caller-identity
+
 workflows:
   build-test-and-approval-deploy:
     jobs:
@@ -68,13 +90,7 @@ workflows:
           requires:
             - node/test
             - SAST
-      - aws-ecr/build-and-push-image:
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          create-repo: true
-          region: '${AWS_DEFAULT_REGION}'
-          registry-id: AWS_ECR_REGISTRY_ID
-          repo: demo_ecr_repo
+      - deploy:
           requires:
             - hold
-          tag: 'test'
+          context: test
