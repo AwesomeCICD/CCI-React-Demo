@@ -51,9 +51,6 @@ jobs:
   deploy:
     docker:
       - image: amazon/aws-cli
-    environment:
-      AWS_DEFAULT_REGION: AWS_DEFAULT_REGION
-      AWS_ROLE_ARN: AWS_ROLE_ARN
     steps:
       - run:
           name: authenticate-and-interact
