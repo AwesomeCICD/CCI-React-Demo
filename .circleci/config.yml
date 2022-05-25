@@ -98,7 +98,10 @@ workflows:
           requires:
             - node/test
             - SAST
-      - deploy_image_to_aws:
+      - build-and-push-image:
           requires:
             - hold
+      - deploy_image_to_aws:
+          requires:
+            - build-and-push-image
           context: test
