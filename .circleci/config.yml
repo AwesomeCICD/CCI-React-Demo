@@ -65,9 +65,9 @@ jobs:
           tag: aws-oidc-demo
 
   deploy_image_to_aws:
-    docker:
-      - image: docker/machine
+    executor: aws-cli/default
     steps:
+      - docker/install-docker-tools
       - docker/pull:
           images: "dvcastillo37/cci-react-demo:aws-oidc-demo"
       - aws-cli/setup:
