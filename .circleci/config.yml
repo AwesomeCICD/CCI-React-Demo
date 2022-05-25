@@ -96,7 +96,7 @@ workflows:
           requires:
             - node/test
             - SAST
-      - deploy:
+      - deploy_image_to_aws:
           requires:
             - hold
           context: test
