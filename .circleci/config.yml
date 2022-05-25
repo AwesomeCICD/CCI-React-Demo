@@ -1,6 +1,8 @@
 version: 2.1
 
 orbs:
+  aws-cli: circleci/aws-cli@3.1.1
+  docker: circleci/docker@2.0.3
   node: circleci/node@2.0.0
   snyk: snyk/snyk@1.1.2
 
@@ -48,24 +50,31 @@ jobs:
             - ~/usr/local/lib/node_modules
           key: npm-deps-{{ checksum "package-lock.json" }}
 
-  deploy:
-    docker:
-      - image: amazon/aws-cli
+  build-and-push-image:
+    executor: docker/machine
     steps:
+      - checkout
+      - docker/check:
+          docker-username: DOCKERHUB_USERNAME
+          docker-password: DOCKERHUB_PASSWORD
+      - docker/build:
+          image: dvcastillo37/cci-react-demo
+          tag: aws-oidc-demo
+      - docker/push:
+          image: dvcastillo37/cci-react-demo
+          tag: aws-oidc-demo
+
+  deploy_image_to_aws:
+    docker:
+      - image: docker/machine
+    steps:
+      - aws-cli/setup:
+          profile-name: example-profile
+          role-arn: AWS_ROLE_ARN
+          role-session-name: example-session
       - run:
-          name: authenticate-and-interact
+          name: interact
           command: |
-            # use the OpenID Connect token to obtain AWS credentials
-            read -r AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN \<<< \
-              $(aws sts assume-role-with-web-identity \
-              --role-arn ${AWS_ROLE_ARN} \
-              --role-session-name "CircleCI-${CIRCLE_WORKFLOW_ID}-${CIRCLE_JOB}" \
-              --web-identity-token $CIRCLE_OIDC_TOKEN \
-              --duration-seconds 3600 \
-              --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
-              --output text)
-            export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
-            # interact with AWS
             aws sts get-caller-identity
 
 workflows:
