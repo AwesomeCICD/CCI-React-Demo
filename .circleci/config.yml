@@ -68,8 +68,9 @@ jobs:
     executor: aws-cli/default
     steps:
       - docker/install-docker-tools
-      - docker/pull:
-          images: "dvcastillo37/cci-react-demo:aws-oidc-demo"
+      - run:
+          name: Pull new image
+          command: docker pull dvcastillo37/cci-react-demo:aws-oidc-demo
       - aws-cli/setup:
           profile-name: example-profile
           role-arn: AWS_ROLE_ARN
