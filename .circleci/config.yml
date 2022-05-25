@@ -68,6 +68,8 @@ jobs:
     docker:
       - image: docker/machine
     steps:
+      - docker/pull:
+          images: "dvcastillo37/cci-react-demo:aws-oidc-demo"
       - aws-cli/setup:
           profile-name: example-profile
           role-arn: AWS_ROLE_ARN
