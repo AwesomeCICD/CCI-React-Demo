@@ -75,9 +75,13 @@ jobs:
           role-arn: '${AWS_ROLE_ARN}'
           role-session-name: example-session
       - run:
-          name: interact
+          name: tag most recent image
           command: |
-            aws sts get-caller-identity
+            docker tag cci-react-demo:aws-oidc-demo ${AWS_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/cci-react-demo:aws-oidc-demo
+      - run:
+          name: push image to aws ecr
+          command: |
+            docker push ${AWS_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/cci-react-demo:aws-oidc-demo
 
 workflows:
   build-test-and-approval-deploy:
