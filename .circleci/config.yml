@@ -77,7 +77,7 @@ jobs:
       - run:
           name: tag most recent image
           command: |
-            docker tag cci-react-demo:aws-oidc-demo ${AWS_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/cci-react-demo:aws-oidc-demo
+            docker tag dvcastillo37/cci-react-demo:aws-oidc-demo ${AWS_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/cci-react-demo:aws-oidc-demo
       - run:
           name: push image to aws ecr
           command: |
