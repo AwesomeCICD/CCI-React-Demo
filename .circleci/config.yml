@@ -75,6 +75,10 @@ jobs:
           role-arn: '${AWS_ROLE_ARN}'
           role-session-name: example-session
       - run:
+          name: auth to default registry
+          command: |
+            aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
+      - run:
           name: tag most recent image
           command: |
             docker tag dvcastillo37/cci-react-demo:aws-oidc-demo ${AWS_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/cci-react-demo:aws-oidc-demo
