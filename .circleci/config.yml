@@ -311,7 +311,6 @@ workflows:
   main:
     jobs:
       - build-and-push-image:
-          context: cera-vault-oidc
           region: <<pipeline.parameters.region>>
           name: build & Push [<<pipeline.parameters.region>>]
       # - skaffold-build-push:
