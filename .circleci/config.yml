@@ -169,6 +169,14 @@ jobs:
           key: npm-deps-{{ checksum "package-lock.json" }}
 
   build-and-push-image:
+    parameters:
+      boa-environment:
+        type: string
+        default: dev
+        description: Environment suffix used by namesapce and SA account name.
+      region:
+        type: string
+        description: where we are deploying, a CERA cluster region
     executor: docker/machine
     steps:
       - checkout
@@ -339,41 +347,40 @@ jobs:
 workflows:
   main:
     jobs:
-      - java-checkstyle:
-          context: [ compass-integration-bank-of-aion ]
-      - java-test-and-code-cov
-      - python-checkstyle
-      - python-test
-      - skaffold-build-push:
+      - build-and-push-image:
           context: cera-vault-oidc
           region: <<pipeline.parameters.region>>
-          name: Skaffold build & Push [<<pipeline.parameters.region>>]
-      - deploy:
-          name: Deploy Dev [<<pipeline.parameters.region>>]
-          region: <<pipeline.parameters.region>>
-          requires: [ 'Skaffold build & Push [<<pipeline.parameters.region>>]', python-test, java-test-and-code-cov ]
-          context: [ compass-integration-bank-of-aion, cera-vault-oidc ]
-          post-steps:
-            - compass/notify_deployment:
-                token_name: COMPASS_CCI_TOKEN
-                environment_type: development
-      - e2e:
-          requires: [ 'Deploy Dev [<<pipeline.parameters.region>>]' ]
-          region: <<pipeline.parameters.region>>
-      - deploy:
-          name: Deploy Production [<<pipeline.parameters.region>>]
-          requires: [ e2e ]
-          boa-environment: prod
-          region: <<pipeline.parameters.region>>
-          context: [ compass-integration-bank-of-aion, cera-vault-oidc-prod ]
-          filters:
-            branches:
-              only: [ main ]
-          post-steps:
-            - compass/notify_deployment:
-                token_name: COMPASS_CCI_TOKEN
-                environment_type: production
-                environment: CERA-Cluster-namer-Prod
+          name: build & Push [<<pipeline.parameters.region>>]
+      # - skaffold-build-push:
+      #     context: cera-vault-oidc
+      #     region: <<pipeline.parameters.region>>
+      #     name: Skaffold build & Push [<<pipeline.parameters.region>>]
+      # - deploy:
+      #     name: Deploy Dev [<<pipeline.parameters.region>>]
+      #     region: <<pipeline.parameters.region>>
+      #     requires: [ 'Skaffold build & Push [<<pipeline.parameters.region>>]', python-test, java-test-and-code-cov ]
+      #     context: [ compass-integration-bank-of-aion, cera-vault-oidc ]
+      #     post-steps:
+      #       - compass/notify_deployment:
+      #           token_name: COMPASS_CCI_TOKEN
+      #           environment_type: development
+      # - e2e:
+      #     requires: [ 'Deploy Dev [<<pipeline.parameters.region>>]' ]
+      #     region: <<pipeline.parameters.region>>
+      # - deploy:
+      #     name: Deploy Production [<<pipeline.parameters.region>>]
+      #     requires: [ e2e ]
+      #     boa-environment: prod
+      #     region: <<pipeline.parameters.region>>
+      #     context: [ compass-integration-bank-of-aion, cera-vault-oidc-prod ]
+      #     filters:
+      #       branches:
+      #         only: [ main ]
+      #     post-steps:
+      #       - compass/notify_deployment:
+      #           token_name: COMPASS_CCI_TOKEN
+      #           environment_type: production
+      #           environment: CERA-Cluster-namer-Prod
 
 
 commands:
