@@ -368,7 +368,7 @@ commands:
           command: |
             echo "Environment (APP_ENV ): $APP_ENV"
             export VAULT_ADDR="https://vault.<<parameters.region>>.circleci-labs.com"
-            export VAULT_ROLE=boa-${APP_ENV}-deploy
+            export VAULT_ROLE=dc-db-demo-app-deploy
             echo $VAULT_ROLE
             echo $CIRCLE_OIDC_TOKEN > .circleci/vault/token.json
             circleci env subst < .circleci/vault/agent.hcl.tpl > .circleci/vault/agent.hcl
