@@ -171,6 +171,11 @@ jobs:
           kubectl get serviceaccounts -n ${K8S_NAMESPACE}
       - attach_workspace:
           at: output
+      - run: |
+          pwd
+          kubectl apply -n my-dc-db-demo-app -f ./deploy/deployment.yaml
+
+# See page footer for example deploy, or bring your own. 
       # - run: 
       #     name: Deploy BoA
       #     command: |
