@@ -144,12 +144,53 @@ jobs:
           echo "${DOCKER_PWD}" | docker login --username ${DOCKER_LOGIN} --password-stdin docker.nexus.<<parameters.region>>.circleci-labs.com   
       - run: |
           docker build --file=./Dockerfile --tag=docker.nexus.namer.circleci-labs.com/cci-react-demo:dc-db-demo-app .
-      # - docker/build:
-      #     image: docker.nexus.<<parameters.region>>.circleci-labs.com/cci-react-demo
-      #     tag: dc-db-demo-app
-      # - docker/push:
-      #     image: docker.nexus.<<parameters.region>>.circleci-labs.com/cci-react-demo
-      #     tag: dc-db-demo-app
+      - run: |
+          docker push docker.nexus.namer.circleci-labs.com/cci-react-demo:dc-db-demo-app
+  
+  deploy:
+    docker:
+      - image: cimg/deploy:2022.08
+    parameters:
+      region:
+        type: string
+        description: where we are deploying, a CERA cluster region
+    steps:
+      - checkout
+      - load-credentials:
+          region: <<parameters.region>>
+      # all k8s info (cluster, ns, etc) came from vault.
+      - run: echo "Now using ${K8S_USER}@${K8S_NAMESPACE}"
+      - run: |
+          sudo apt update && sudo apt install kubectl -y
+          echo ${K8S_CERT} | base64 -d > ca.crt
+          kubectl config set-cluster ${K8S_CLUSTER} --server=${K8S_URL} --certificate-authority=ca.crt
+          export DECODED_TOKEN=$(echo ${K8S_TOKEN} | base64 -d) #kubectl prints an encoded value, MUST decode it to work.
+          kubectl config set-credentials ${K8S_USER} --token=${DECODED_TOKEN}
+          kubectl config set-context default --user=${K8S_USER}  --cluster=${K8S_CLUSTER} --namespace ${K8S_NAMESPACE}
+          kubectl config use-context default
+          kubectl get serviceaccounts -n ${K8S_NAMESPACE}
+      - attach_workspace:
+          at: output
+      # - run: 
+      #     name: Deploy BoA
+      #     command: |
+      #       curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+      #       sudo install skaffold /usr/local/bin/
+      #       export APP_VERSION="0.1.<<pipeline.number>>"
+      #       export CIRCLE_PIPELINE_ID=<<pipeline.id>>
+      #       #only kuztomizing frontend for D&R demo
+      #       cat .circleci/release_tracking/kustomization.yaml | circleci env subst > dev-kubernetes-manifests/kustomization.yaml
+      #       cat .circleci/release_tracking/template_patch.yaml | circleci env subst > dev-kubernetes-manifests/template_patch.yaml
+      #       cat .circleci/release_tracking/virtual_service_region.yaml | circleci env subst > dev-kubernetes-manifests/virtual_service_region.yaml
+      #       kubectl kustomize dev-kubernetes-manifests > dev-kubernetes-manifests/frontend-annotated.yaml
+      #       skaffold deploy --default-repo=docker.nexus.<<parameters.region>>.circleci-labs.com --namespace=${K8S_NAMESPACE} --build-artifacts=output/tags.json
+      # - run:
+      #     name: Wait for deployment
+      #     command: |
+      #       kubectl wait rollout -n ${K8S_NAMESPACE} frontend-rollout --for condition=Available=True --timeout=90s
+      # - run: 
+      #     name: Print Frontend URL
+      #     command: kubectl get service frontend -n ${K8S_NAMESPACE} | awk '{print $4}'
    
 workflows:
   main:
@@ -158,6 +199,11 @@ workflows:
           context: db-oidc
           region: <<pipeline.parameters.region>>
           name: build & Push [<<pipeline.parameters.region>>]
+      - deploy:
+          name: Deploy [<<pipeline.parameters.region>>]
+          region: <<pipeline.parameters.region>>
+          requires: [ 'build & Push [<<pipeline.parameters.region>>]']
+          context: [ db-oidc ]
 
 
 commands:

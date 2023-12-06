@@ -1,0 +1,40 @@
+# # My Service also exposes port 80, but does not need to match
+# # the spec.selector matches the labels of  deployment above
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: httpbin
+#   namespace: scara
+#   labels:
+#     app: httpbin
+#     service: httpbin
+# spec:
+#   ports:
+#   - name: http
+#     port: 80
+#     protocol: TCP
+#   selector:
+#     app: httpbin
+
+# ---
+# # Our virtual service exposes our internal K8s service to our istio gateway
+# # The Istio gateway handles SSL and is already internet exposed.
+# kind: VirtualService
+# apiVersion: networking.istio.io/v1beta1
+# metadata:
+#   name: scara-app
+#   namespace: scara
+# spec:
+#   hosts:
+#     # claim your domain here! (must be sub of demo.region.circleci-labs.com)
+#     - httpbin.demo.namer.circleci-labs.com
+#   gateways:
+#     # gateway name is region specific
+#     - istio-ingress/namer-istio-gateway-demos
+#   http:
+#     - route:
+#         - destination:
+#             host: httpbin.scara.svc.cluster.local
+#             port:
+#               number: 80
+# status: {}

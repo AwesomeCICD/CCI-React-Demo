@@ -16,7 +16,7 @@ spec:
         version: v1
     spec:
       containers:
-      - image: docker.io/kong/httpbin
+      - image: docker.nexus.namer.circleci-labs.com/cci-react-demo:dc-db-demo-app
         imagePullPolicy: IfNotPresent
         name: dbdc
         ports:
