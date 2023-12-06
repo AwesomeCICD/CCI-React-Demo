@@ -173,7 +173,7 @@ jobs:
           at: output
       - run: |
           pwd
-          kubectl apply -n my-dc-db-demo-app -f ./deploy/deployment.yaml
+          kubectl apply -n dc-db-demo-app -f /home/circleci/project/deploy/deployment.yaml
 
 # See page footer for example deploy, or bring your own. 
       # - run: 
