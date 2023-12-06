@@ -142,13 +142,14 @@ jobs:
           docker_layer_caching: true
       - run: |
           echo "${DOCKER_PWD}" | docker login --username ${DOCKER_LOGIN} --password-stdin docker.nexus.<<parameters.region>>.circleci-labs.com   
-      
-      - docker/build:
-          image: docker.nexus.<<parameters.region>>.circleci-labs.com/cci-react-demo
-          tag: dc-db-demo-app
-      - docker/push:
-          image: docker.nexus.<<parameters.region>>.circleci-labs.com/cci-react-demo
-          tag: dc-db-demo-app
+      - run: |
+          docker build --file=./Dockerfile --tag=docker.nexus.namer.circleci-labs.com/cci-react-demo:dc-db-demo-app .
+      # - docker/build:
+      #     image: docker.nexus.<<parameters.region>>.circleci-labs.com/cci-react-demo
+      #     tag: dc-db-demo-app
+      # - docker/push:
+      #     image: docker.nexus.<<parameters.region>>.circleci-labs.com/cci-react-demo
+      #     tag: dc-db-demo-app
    
 workflows:
   main:
