@@ -1,7 +1,7 @@
 {{$appenv := env "APP_ENV"}}
-{{$apppath :=  "dc-db-demo-app" }}
+{{$apppath :=  "secret/cluster/dc-db-demo-app" }}
 {{ if eq $appenv "dev" }}
-    {{$apppath = printf "secret/cluster/dc-db-demo-app"}}
+    {{$apppath = printf "secret/cluster/dc-db-demo-app" $appenv}}
 {{ end }}
 {{ with secret $apppath }}
    # Secrets for {{ $appenv }} from {{ $apppath }}
