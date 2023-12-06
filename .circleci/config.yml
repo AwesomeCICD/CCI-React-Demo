@@ -7,32 +7,6 @@
 #   snyk: snyk/snyk@2.0.2
 
 # jobs:
-#   lint_and_prettify:
-#     docker: 
-#       - image: cimg/node:17.2.0
-#     resource_class: medium
-
-#     steps:
-#       - checkout
-#       - restore_cache:
-#           keys:
-#             - npm-deps-{{ checksum "package-lock.json" }}
-#       - run: npm ci
-#       - run: sudo npm i -g eslint prettier --unsafe-perm=true --allow-root
-#       - run: eslint src/*.js && prettier --check "src/*.js"
-#       - save_cache:
-#           paths:
-#             - ~/usr/local/lib/node_modules
-#           key: npm-deps-{{ checksum "package-lock.json" }}
-
-#   SAST: 
-#     docker:
-#       - image: cimg/node:17.2.0
-#     steps:
-#       - checkout
-#       - run: npm ci
-#       - run: npm run build
-#       - snyk/scan
 
 #   build:
 #     docker: 
@@ -123,6 +97,7 @@ orbs:
   docker: circleci/docker@2.4.0
   node: circleci/node@5.1.0
   snyk: snyk/snyk@2.0.2
+
           
 parameters:
   region:
@@ -157,20 +132,22 @@ jobs:
       region:
         type: string
         description: where we are deploying, a CERA cluster region
-    executor: docker/machine
+    docker:
+      - image: cimg/node:21.4.0
     steps:
       - checkout
       - load-credentials:
           region: <<parameters.region>>
-      - docker/check:
-          docker-username: DOCKERHUB_USERNAME
-          docker-password: DOCKERHUB_PASSWORD
-      # - docker/build:
-      #     image: dvcastillo37/cci-react-demo
-      #     tag: aws-oidc-demo
-      # - docker/push:
-      #     image: dvcastillo37/cci-react-demo
-      #     tag: aws-oidc-demo
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: |
+          echo "${DOCKER_PWD}" | docker login --username ${DOCKER_LOGIN} --password-stdin docker.nexus.<<parameters.region>>.circleci-labs.com   
+      - docker/build:
+          image: dvcastillo37/cci-react-demo
+          tag: dc-db-demo-app
+      - docker/push:
+          image: dvcastillo37/cci-react-demo
+          tag: dc-db-demo-app
    
 workflows:
   main:

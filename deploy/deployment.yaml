@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dbdc
+  namespace: dc-db-demo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dbdc
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: dbdc
+        version: v1
+    spec:
+      containers:
+      - image: docker.io/kong/httpbin
+        imagePullPolicy: IfNotPresent
+        name: dbdc
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
