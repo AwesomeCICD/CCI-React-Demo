@@ -142,7 +142,7 @@ jobs:
           docker_layer_caching: true
       - run: |
           echo "${DOCKER_PWD}" | docker login --username ${DOCKER_LOGIN} --password-stdin docker.nexus.<<parameters.region>>.circleci-labs.com   
-          make release IMAGE_NAMESPACE="docker.nexus.<<parameters.cera_region>>.circleci-labs.com/db-dc-demo" DOCKER_PUSH=true
+          make release IMAGE_NAMESPACE="docker.nexus.<<parameters.region>>.circleci-labs.com/db-dc-demo" DOCKER_PUSH=true
    
 workflows:
   main:
