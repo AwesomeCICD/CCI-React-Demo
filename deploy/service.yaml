@@ -34,7 +34,7 @@ spec:
   http:
     - route:
         - destination:
-            host: dbdcbin.dbdc.svc.cluster.local
+            host: dbdcbin.dc-db-demo-app.svc.cluster.local
             port:
               number: 80
 status: {}
