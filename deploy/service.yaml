@@ -11,6 +11,7 @@ metadata:
 spec:
   ports:
   - name: http
+    port: 80
     targetPort: 3000
     protocol: TCP
   selector:
