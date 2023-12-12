@@ -20,7 +20,7 @@ spec:
         imagePullPolicy: IfNotPresent
         name: dbdcbin
         ports:
-        - name: http
-          containerPort: 80
-          targetPort: 3000
-          protocol: TCP
+            - containerPort: 80
+              name: http
+              protocol: TCP
+              targetPort: 3000  # Update the targetPort with a valid value
