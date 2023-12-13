@@ -10,8 +10,9 @@ metadata:
     service: dbdcbin
 spec:
   ports:
-  - name: dbdcbin
+  - name: http
     port: 3000
+    targetPort: 3000
     protocol: TCP
   selector:
     app: dbdcbin
