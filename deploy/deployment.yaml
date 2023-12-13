@@ -21,5 +21,5 @@ spec:
         name: dbdcbin
         ports:
             - containerPort: 3000
-              name: http
+              name: dbdcbin
               protocol: TCP
