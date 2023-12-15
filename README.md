@@ -1,4 +1,4 @@
-# Getting Started with Create React App [![CircleCI](https://circleci.com/gh/dvcastillo/CCIChallenge/tree/main.svg?style=svg)](https://circleci.com/gh/dvcastillo/CCIChallenge/tree/main)
+s# Getting Started with Create React App [![CircleCI](https://circleci.com/gh/dvcastillo/CCIChallenge/tree/main.svg?style=svg)](https://circleci.com/gh/dvcastillo/CCIChallenge/tree/main)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -22,7 +22,7 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+It correctly bundles React in production mode and optimizessdfesasfddsfsadsdfasfd the build for the best performance.sdsdfdfdsfsdfadsafsadf
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
